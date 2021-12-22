@@ -1,12 +1,16 @@
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
+use std::process;
 
 fn main() {
 
     let args: Vec<String> = env::args().collect();
 
-    let config: Config = Config::new(&args);
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("Problema nos argumentos passados: {}", err);
+        process::exit(1);
+    });
     
     let mut f: File = File::open(&config.filename).expect("Arquivo não encontrado");
 
@@ -28,10 +32,15 @@ struct Config {
 }
 
 impl Config {
-    fn new(args: &[String]) -> Config {
-        let query: String = args[1].clone();
-        let filename: String = args[2].clone();
+    fn new(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("Não há argumentos suficientes!\n");
+        }
 
-        Config {query, filename}
+        let query = args[1].clone();
+        let filename = args[2].clone();
+
+        Ok(Config { query, filename })
     }
 }
+
