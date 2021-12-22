@@ -5,14 +5,27 @@ use std::io::prelude::*;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let query = &args[1];
-    let filename = &args[2];
-
-    let mut f = File::open(filename).expect("Arquivo não encontrado");
+    let (query, filename) = parse_config(&args);
+    
+    let mut f: File = File::open(filename).expect("Arquivo não encontrado");
 
     let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .expect("Problema na leitura do arquivo");
 
-    println!("With text:\n{}", contents);
+    println!("Arquivo lido: {}", filename);
+
+
+    f.read_to_string(&mut &mut contents)
+    .expect("Problema pra ler o arquivo");
+
+        
+        println!("##### Conteudo: \n\n{}", contents);
+
+}
+
+fn parse_config(args: & [String]) -> (&str, &str) {
+
+    let query: &String = &args[1];
+    let filename: &String = & args[2];
+
+    (query, filename)
 }
