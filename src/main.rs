@@ -3,15 +3,15 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
+
     let args: Vec<String> = env::args().collect();
 
-    let (query, filename) = parse_config(&args);
+    let config: Config = Config::new(&args);
     
-    let mut f: File = File::open(filename).expect("Arquivo não encontrado");
+    let mut f: File = File::open(&config.filename).expect("Arquivo não encontrado");
 
-    let mut contents = String::new();
+    let mut contents: String = String::new();
 
-    println!("Arquivo lido: {}", filename);
 
 
     f.read_to_string(&mut &mut contents)
@@ -22,10 +22,16 @@ fn main() {
 
 }
 
-fn parse_config(args: & [String]) -> (&str, &str) {
+struct Config {
+    query: String,
+    filename: String,
+}
 
-    let query: &String = &args[1];
-    let filename: &String = & args[2];
+impl Config {
+    fn new(args: &[String]) -> Config {
+        let query: String = args[1].clone();
+        let filename: String = args[2].clone();
 
-    (query, filename)
+        Config {query, filename}
+    }
 }
