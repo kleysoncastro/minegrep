@@ -10,7 +10,7 @@ fn main() {
 
     // verifica se todos os argumentos necessarios foram passados 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problema nos argumentos passados: {}", err);
+        eprintln!("Problema nos argumentos passados: {}", err);
         process::exit(1);
     });
     
@@ -20,7 +20,7 @@ fn main() {
 
     // Ferifica se a erro nos parametros
     if let Err(e) = minegrep::run(config) {
-        println!("Erro na execução: {}", e);
+        eprintln!("Erro na execução: {}", e);
         process::exit(1);
     }
 
